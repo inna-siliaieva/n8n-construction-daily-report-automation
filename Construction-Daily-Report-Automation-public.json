@@ -1,0 +1,445 @@
+{
+  "name": "Construction Daily Report Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Construction Daily Report",
+        "formDescription": "Submit the daily construction site report for the selected project.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Report Date",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Project / Construction Site",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Supervisor",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Number of Workers",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Hours Worked",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Work Completed",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Materials Used",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "Delays / Problems",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "Safety Incident",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Yes"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Additional Notes",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Submit Daily Report"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -576,
+        -80
+      ],
+      "id": "007a65fa-caf9-49b5-ae00-596b1f4a60a8",
+      "name": "Receive Daily Site Report"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f0962cd-a05f-44e3-aa61-4f2b8b2aef46",
+              "name": "reportDate",
+              "value": "={{ $json['Report Date'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7048d70f-0b94-4514-9b79-b1e14b72754a",
+              "name": "projectSite",
+              "value": "={{ $json['Project / Construction Site'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6e35025d-eefa-4aed-a6b6-708827e1b02b",
+              "name": "supervisor",
+              "value": "={{ $json.Supervisor }}",
+              "type": "string"
+            },
+            {
+              "id": "6a777aca-fb59-4323-ace7-a291f40683f9",
+              "name": "numberOfWorkers",
+              "value": "={{ $json['Number of Workers'] }}",
+              "type": "number"
+            },
+            {
+              "id": "d2551789-091d-4f80-9b20-d6c2973f327d",
+              "name": "hoursWorked",
+              "value": "={{ $json['Hours Worked'] }}",
+              "type": "number"
+            },
+            {
+              "id": "8a121fcd-eee9-4e9c-b00d-348719b4e901",
+              "name": "workCompleted",
+              "value": "={{ $json['Work Completed'] }}",
+              "type": "string"
+            },
+            {
+              "id": "72c65840-bbac-46c5-a007-8ff4ac1a4aa5",
+              "name": "materialsUsed",
+              "value": "={{ $json['Materials Used'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3a96d431-8fa8-44e6-8b8f-2984ab9dc59f",
+              "name": "delaysProblems",
+              "value": "={{ $json['Delays / Problems'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f58b42b2-81ff-4569-97c4-1d5474e5200d",
+              "name": "safetyIncident",
+              "value": "={{ $json['Safety Incident'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d2fc25d1-22cc-4a2a-b76a-bc246cc341ca",
+              "name": "additionalNotes",
+              "value": "={{ $json['Additional Notes'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b28aaf74-8f1a-484e-b6db-992d3c118299",
+              "name": "submittedAt",
+              "value": "={{ $json.submittedAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -352,
+        -80
+      ],
+      "id": "9686cac0-10b2-428f-9382-c1dee5cbd38c",
+      "name": "Prepare Report Data"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Report Date": "={{ $('Receive Daily Site Report').item.json['Report Date'] }}",
+            "Project / Construction Site": "={{ $('Receive Daily Site Report').item.json['Project / Construction Site'] }}",
+            "Supervisor": "={{ $('Receive Daily Site Report').item.json.Supervisor }}",
+            "Number of Workers": "={{ $('Receive Daily Site Report').item.json['Number of Workers'] }}",
+            "Hours Worked": "={{ $('Receive Daily Site Report').item.json['Hours Worked'] }}",
+            "Work Completed": "={{ $('Receive Daily Site Report').item.json['Work Completed'] }}",
+            "Materials Used": "={{ $('Receive Daily Site Report').item.json['Materials Used'] }}",
+            "Delays / Problems": "={{ $('Receive Daily Site Report').item.json['Delays / Problems'] }}",
+            "Safety Incident": "={{ $('Receive Daily Site Report').item.json['Safety Incident'] }}",
+            "Additional Notes": "={{ $('Receive Daily Site Report').item.json['Additional Notes'] }}",
+            "Submitted At": "={{ $('Receive Daily Site Report').item.json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Report Date",
+              "displayName": "Report Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project / Construction Site",
+              "displayName": "Project / Construction Site",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Supervisor",
+              "displayName": "Supervisor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Number of Workers",
+              "displayName": "Number of Workers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hours Worked",
+              "displayName": "Hours Worked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Work Completed",
+              "displayName": "Work Completed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Materials Used",
+              "displayName": "Materials Used",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Delays / Problems",
+              "displayName": "Delays / Problems",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Safety Incident",
+              "displayName": "Safety Incident",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Additional Notes",
+              "displayName": "Additional Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Submitted At",
+              "displayName": "Submitted At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        -80
+      ],
+      "id": "502e4759-fb81-403b-99c0-6de0150c35f2",
+      "name": "Save Report to Google Sheets"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6de2ee41-12ce-4360-9fbf-9cc3fa4a98e4",
+              "leftValue": "={{ $json['Delays / Problems'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8e1576a9-9911-40ff-b7b2-21f92a176b6c",
+              "leftValue": "={{ $json['Safety Incident'] }}",
+              "rightValue": "Yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        96,
+        -80
+      ],
+      "id": "4e7d40f9-1314-4481-98bc-254ad7c796b3",
+      "name": "Check for Issues or Safety Incidents"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=✅ Daily Construction Report Received  Project: {{ $json[\"Project / Construction Site\"] }} Date: {{ $json[\"Report Date\"] }} Supervisor: {{ $json[\"Supervisor\"] }}  The report was saved successfully. No delays or safety incidents were reported.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        16
+      ],
+      "id": "2cc62baf-3c09-4f2c-ac23-34a6f80d9feb",
+      "name": "Send Report Confirmation"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "=⚠️ Construction Site Alert  Project: {{ $json[\"Project / Construction Site\"] }} Date: {{ $json[\"Report Date\"] }} Supervisor: {{ $json[\"Supervisor\"] }}  Delays / Problems: {{ $json[\"Delays / Problems\"] }}  Safety Incident: {{ $json[\"Safety Incident\"] }}  Please review the daily site report.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        -176
+      ],
+      "id": "d7fd0ff7-c438-4e9f-8381-663b0a0cedae",
+      "name": "Send Issue Alert"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Daily Site Report": {
+      "main": [
+        [
+          {
+            "node": "Prepare Report Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Report Data": {
+      "main": [
+        [
+          {
+            "node": "Save Report to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Report to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Check for Issues or Safety Incidents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Issues or Safety Incidents": {
+      "main": [
+        [
+          {
+            "node": "Send Issue Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Report Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "tags": []
+}

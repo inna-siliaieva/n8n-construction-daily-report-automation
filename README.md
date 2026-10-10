@@ -42,7 +42,7 @@ The workflow collects structured site reports through an n8n form, prepares the 
 
 ### 4. Telegram — Standard Report Confirmation
 
-![Telegram Report Confirmation](screenshots/04-issue-alert-telegram.png)
+![Telegram Report Confirmation](screenshots/04-normal-report-telegram.png)
 
 ### 5. Normal Report Branch
 
